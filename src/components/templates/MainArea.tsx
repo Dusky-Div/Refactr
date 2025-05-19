@@ -5,19 +5,30 @@ import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 
-const cleanRefactoredCode = (rawCode) => {
-  return rawCode
-    .replace(/^```[\s\S]*?\n?/, "") // remove starting ```
-    .replace(/```$/, "") // remove ending ```
-    .replace(/\\n/g, "\n") // literal \n → real newline
-    .replace(/\\"/g, '"'); // unescape double quotes
-};
-
 const MainArea = () => {
   const [inputCode, setInputCode] = useState("");
   const [analysisResult, setAnalysisResult] = useState("");
   const [refactoredCode, setRefactoredCode] = useState("");
   const [error, setError] = useState("");
+  const [language, setLanguage] = useState("python");
+  console.log(language, "is the selected language");
+
+  const extractJSONFromGeminiResponse = (text: string) => {
+    const jsonStart = text.indexOf("{");
+    const jsonEnd = text.lastIndexOf("}");
+
+    if (jsonStart === -1 || jsonEnd === -1) return null;
+
+    const possibleJSON = text.slice(jsonStart, jsonEnd + 1);
+
+    try {
+      return JSON.parse(possibleJSON);
+    } catch (err) {
+      console.error("JSON parse failed on:", possibleJSON);
+      return null;
+    }
+  };
+
   useEffect(() => {
     console.log("Updated analysisResult:", analysisResult);
   }, [analysisResult]);
@@ -70,7 +81,12 @@ Return your response in this exact JSON format:
       const responseText = response.data.candidates[0]?.content?.parts[0]?.text;
 
       try {
-        const parsed = JSON.parse(responseText);
+        const parsed = extractJSONFromGeminiResponse(responseText);
+        if (!parsed) {
+          setError("Could not extract valid JSON from Gemini response.");
+          return;
+        }
+
         setAnalysisResult(parsed.analysis || "");
         setRefactoredCode(parsed.refactoredCode?.trim() || "");
       } catch (jsonErr) {
@@ -85,16 +101,21 @@ Return your response in this exact JSON format:
 
   return (
     <div className="flex flex-col overflow-auto w-full h-fit bg-[#0A0A0A]">
-      <CodeEditor inputCode={inputCode} setInputCode={setInputCode} />
-      <button className="bg-white" onClick={GeminiRequestHandler}>
-        test
-      </button>
-      <RefactrButton />
+      <CodeEditor
+        inputCode={inputCode}
+        setInputCode={setInputCode}
+        language={language}
+        setLanguage={setLanguage}
+      />
+      <RefactrButton onClick={GeminiRequestHandler} />
       <div className="analysis-window w-full flex gap-4 items-center justify-center">
         <div className="flex flex-col h-fit self-center bg-[#111111] rounded-lg p-4 pt-0 m-3 w-2/5 border border-[#222222]">
-          <div className="flex text-[#c9c9c9] py-4 font-medium text-lg whitespace-pre-wrap" />
+          <div className="flex text-[#c9c9c9] font-medium text-lg whitespace-pre-wrap" />
+          <p className="text-[#c9c9c9] py-4 font-medium text-lg">
+            Analysis Results
+          </p>
           <div
-            className="flex bg-[#1E1E1E] py-3 px-4 w-full h-96 rounded-lg text-white overflow-auto"
+            className="bg-[#1E1E1E] py-3 px-4 w-full h-96 rounded-lg text-white overflow-auto whitespace-pre-wrap"
             dangerouslySetInnerHTML={{
               __html: analysisResult
                 .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
@@ -110,7 +131,7 @@ Return your response in this exact JSON format:
             <Editor
               value={refactoredCode}
               onChange={(value) => setRefactoredCode(value || "")}
-              language="cpp"
+              language={language}
               theme="vs-dark"
               options={{
                 minimap: { enabled: false },

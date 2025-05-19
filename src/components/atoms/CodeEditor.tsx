@@ -1,15 +1,19 @@
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
 import { HyperText } from "../magicui/hyper-text";
 
 interface CodeEditorProps {
   inputCode: string;
   setInputCode: (value: string) => void;
+  language: string;
+  setLanguage: (value: string) => void;
 }
 
-const CodeEditor = ({ inputCode, setInputCode }: CodeEditorProps) => {
-  const [language, setLanguage] = useState("python");
-
+const CodeEditor = ({
+  inputCode,
+  setInputCode,
+  language,
+  setLanguage,
+}: CodeEditorProps) => {
   const languages = [
     "python",
     "javascript",
