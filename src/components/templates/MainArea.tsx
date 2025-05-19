@@ -4,12 +4,15 @@ import Editor from "@monaco-editor/react";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
+import { ChevronUp } from "lucide-react";
+import RefactredCodeWindow from "./RefactredCodeWindow";
 
 const MainArea = () => {
   const [inputCode, setInputCode] = useState("");
   const [analysisResult, setAnalysisResult] = useState("");
   const [refactoredCode, setRefactoredCode] = useState("");
   const [error, setError] = useState("");
+  const [isAnalysisExpanded, setIsAnalysisExpanded] = useState(true);
   const [language, setLanguage] = useState("python");
   console.log(language, "is the selected language");
 
@@ -91,11 +94,11 @@ Return your response in this exact JSON format:
         setRefactoredCode(parsed.refactoredCode?.trim() || "");
       } catch (jsonErr) {
         setError("Could not parse Gemini response.");
-        console.error("Parsing error:", jsonErr);
+        console.error("Parsing error:", error, jsonErr);
       }
     } catch (err) {
       setError("Error fetching data from the API.");
-      console.error(err);
+      console.error(error, err);
     }
   };
 
@@ -108,43 +111,42 @@ Return your response in this exact JSON format:
         setLanguage={setLanguage}
       />
       <RefactrButton onClick={GeminiRequestHandler} />
-      <div className="analysis-window w-full flex gap-4 items-center justify-center">
-        <div className="flex flex-col h-fit self-center bg-[#111111] rounded-lg p-4 pt-0 m-3 w-2/5 border border-[#222222]">
+      <div className="analysis-window w-full flex flex-col gap-4 items-center justify-center">
+        <div className="flex flex-col h-fit self-center bg-[#111111] rounded-lg px-4 m-3 w-4/5 border border-[#222222]">
           <div className="flex text-[#c9c9c9] font-medium text-lg whitespace-pre-wrap" />
-          <p className="text-[#c9c9c9] py-4 font-medium text-lg">
-            Analysis Results
-          </p>
-          <div
-            className="bg-[#1E1E1E] py-3 px-4 w-full h-96 rounded-lg text-white overflow-auto whitespace-pre-wrap"
-            dangerouslySetInnerHTML={{
-              __html: analysisResult
-                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                .replace(/\\n/g, "<br/>"),
-            }}
-          ></div>
-        </div>
-        <div className="refactred-code flex flex-col h-fit self-center bg-[#111111] rounded-lg p-4 pt-0 m-3 w-2/5 border border-[#222222]">
-          <div className="flex text-[#c9c9c9] py-4 font-medium text-lg">
-            This is the refactored code
+          <div className="flex justify-between">
+            <p className="text-[#c9c9c9] py-4 font-medium text-lg">
+              Analysis Results
+            </p>
+            <button
+              className="bg-white w-fit h-fit self-center items-center rounded-full p-1"
+              onClick={() => setIsAnalysisExpanded((prev) => !prev)}
+            >
+              <ChevronUp
+                size={24}
+                strokeWidth={2.2}
+                className={`transition-transform duration-180 ${
+                  !isAnalysisExpanded ? "rotate-180" : ""
+                }`}
+              />
+            </button>
           </div>
-          <div className="flex bg-[#1E1E1E] w-full h-96 rounded-lg">
-            <Editor
-              value={refactoredCode}
-              onChange={(value) => setRefactoredCode(value || "")}
-              language={language}
-              theme="vs-dark"
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                lineNumbers: "on",
-                roundedSelection: false,
-                scrollBeyondLastLine: false,
-                automaticLayout: true,
-                padding: { top: 16, bottom: 16 },
+          {isAnalysisExpanded && (
+            <div
+              className="bg-[#1E1E1E] py-3 px-4 mb-4 w-full h-96 rounded-lg text-white overflow-auto whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{
+                __html: analysisResult
+                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                  .replace(/\\n/g, "<br/>"),
               }}
-            />
-          </div>
+            ></div>
+          )}
         </div>
+        <RefactredCodeWindow
+          refactoredCode={refactoredCode}
+          setRefactoredCode={setRefactoredCode}
+          language={language}
+        />
       </div>
     </div>
   );

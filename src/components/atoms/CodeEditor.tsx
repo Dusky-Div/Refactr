@@ -67,7 +67,7 @@ const CodeEditor = ({
         </div>
       </div>
 
-      <div className="h-96 overflow-hidden rounded-lg">
+      <div className="h-96 overflow-auto rounded-lg">
         <Editor
           value={inputCode}
           onChange={(value) => setInputCode(value || "")}

@@ -1,17 +1,30 @@
-w;
-const RefactredCodeWindow = () => {
-  const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("python");
+import Editor from "@monaco-editor/react";
+import CopyButton from "../atoms/CopyButton";
 
+interface RefactredCodeWindowProps {
+  refactoredCode: string;
+  setRefactoredCode: (value: string) => void;
+  language: string;
+}
+
+const RefactredCodeWindow: React.FC<RefactredCodeWindowProps> = ({
+  refactoredCode,
+  setRefactoredCode,
+  language,
+}) => {
   return (
-    <div className="flex flex-col h-fit self-center bg-[#111111] rounded-lg p-4 pt-0 m-3 w-2/5 border border-[#222222]">
-      <div className="flex text-[#c9c9c9] py-4 font-medium text-lg">
-        This is the refactored code
+    <div className="refactred-code flex flex-col h-fit self-center bg-[#111111] rounded-lg p-4 pt-0 m-3 w-4/5 border border-[#222222]">
+      <div className="flex justify-between ">
+        <div className="flex text-[#c9c9c9] py-4 font-medium text-lg">
+          This is the refactored code
+        </div>
+        <CopyButton textToCopy={refactoredCode} />
       </div>
+
       <div className="flex bg-[#1E1E1E] w-full h-96 rounded-lg">
         <Editor
-          value={code}
-          onChange={(value) => setCode(value || "")}
+          value={refactoredCode}
+          onChange={(value) => setRefactoredCode(value || "")}
           language={language}
           theme="vs-dark"
           options={{
