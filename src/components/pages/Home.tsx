@@ -8,7 +8,7 @@ const Home = () => {
   const auth = useAuth();
   const user = auth?.user;
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const [firstName, setFirstName] = useState<string>("");
+  const [FName, setFName] = useState<string>("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,6 +16,7 @@ const Home = () => {
         try {
           console.log(user);
           console.log(user.uid);
+
           const response = await fetch(`${BACKEND_URL}/api/user/${user.uid}`);
 
           if (!response.ok) {
@@ -23,13 +24,15 @@ const Home = () => {
           }
 
           const data = await response.json();
-          setFirstName(data.firstName);
+          setFName(data.firstName);
+          console.log("User data fetched:", data);
+          console.log("First Name:", data.firstName);
+          console.log(typeof FName);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
       }
     };
-
     fetchUserData();
   }, [user]);
 
@@ -37,10 +40,9 @@ const Home = () => {
     <div className="flex h-svh">
       <SideNav />
       <div className="flex flex-col w-full">
-        <TopBar />
+        <TopBar firstName={FName} />
         <MainArea />
       </div>{" "}
-      {/* <h1>Welcome, {user ? firstName : "Guest"}</h1> */}
     </div>
   );
 };

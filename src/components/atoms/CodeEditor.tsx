@@ -2,8 +2,12 @@ import Editor from "@monaco-editor/react";
 import { useState } from "react";
 import { HyperText } from "../magicui/hyper-text";
 
-const CodeEditor = () => {
-  const [code, setCode] = useState("");
+interface CodeEditorProps {
+  inputCode: string;
+  setInputCode: (value: string) => void;
+}
+
+const CodeEditor = ({ inputCode, setInputCode }: CodeEditorProps) => {
   const [language, setLanguage] = useState("python");
 
   const languages = [
@@ -30,6 +34,13 @@ const CodeEditor = () => {
     setLanguage(event.target.value);
   };
 
+  const handleEditorDidMount = (editor: any) => {
+    // Automatically format the code after pasting
+    editor.onDidPaste((e: any) => {
+      editor.trigger("source", "editor.action.formatDocument", {});
+    });
+  };
+
   return (
     <div className="flex flex-col self-center bg-[#111111] rounded-lg p-4 pt-0 mt-10 mb-3 w-4/5 border border-[#222222]">
       <div className="flex justify-between items-center p-2 pr-0">
@@ -54,8 +65,8 @@ const CodeEditor = () => {
 
       <div className="h-96 overflow-hidden rounded-lg">
         <Editor
-          value={code}
-          onChange={(value) => setCode(value || "")}
+          value={inputCode}
+          onChange={(value) => setInputCode(value || "")}
           language={language} // Dynamic language setting
           theme="vs-dark"
           options={{
@@ -67,6 +78,7 @@ const CodeEditor = () => {
             automaticLayout: true,
             padding: { top: 16, bottom: 16 },
           }}
+          onMount={handleEditorDidMount} // Attach the mount handler
         />
       </div>
     </div>

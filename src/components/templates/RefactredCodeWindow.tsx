@@ -1,5 +1,4 @@
-import Editor from "@monaco-editor/react";
-import { useState } from "react";
+w;
 const RefactredCodeWindow = () => {
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("python");

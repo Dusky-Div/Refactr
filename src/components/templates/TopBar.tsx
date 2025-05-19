@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "../../authContext/AuthContext.tsx";
-const TopBar = () => {
+const TopBar = ({ firstName }: { firstName: string }) => {
   const auth = useAuth();
   const user = auth?.user;
   const navigate = useNavigate();
@@ -10,7 +10,8 @@ const TopBar = () => {
       <div className="flex justify-between items-center w-full">
         <p>Torimayikechodo.</p>
         {user ? (
-          <div className="flex">
+          <div className="flex w-fit h-fit gap-2 items-center">
+            <p>Hey there, {firstName}</p>
             <button className="flex w-8 h-8 rounded-full border border-1 bg-[#fff]"></button>
           </div>
         ) : (

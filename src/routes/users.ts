@@ -7,12 +7,12 @@ const router = Router();
 router.get("/api/user/:firebaseUID", async (req: any, res: any) => {
   try {
     const { firebaseUID } = req.params;
-    const user = await User.findOne({ firebaseUID });
+    const user = await User.findOne({ firebaseUID: firebaseUID });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    console.log("User found:", user);
     res.status(200).json(user);
   } catch (error) {
     console.error("Error fetching user:", error);
