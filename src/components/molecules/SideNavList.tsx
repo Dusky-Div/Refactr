@@ -3,7 +3,7 @@ import { ScrollArea } from "../component-lib/ScrollArea";
 
 const SideNavList = () => {
   return (
-    <ScrollArea className="flex flex-col h-3/5 my-4 px-2">
+    <ScrollArea className="flex flex-col h-4/6 my-4 px-2">
       <SideNavListItem Title={"Firebase authentication setup"} />
       <SideNavListItem Title={"Python script to read a file"} />
       <SideNavListItem Title={"Basic Flask API example"} />

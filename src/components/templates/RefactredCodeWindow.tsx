@@ -13,15 +13,15 @@ const RefactredCodeWindow: React.FC<RefactredCodeWindowProps> = ({
   language,
 }) => {
   return (
-    <div className="refactred-code flex flex-col h-fit self-center bg-[#111111] rounded-lg p-4 pt-0 m-3 w-4/5 border border-[#222222]">
+    <div className="refactred-code flex flex-col h-fit self-center bg-[#000] rounded-lg p-4 pt-0 m-3 w-4/5 border border-[#222222]">
       <div className="flex justify-between ">
-        <div className="flex text-[#c9c9c9] py-4 font-medium text-lg">
+        <div className="flex text-[#fff] font-fustat py-4 font-normal text-2xl">
           This is the refactored code
         </div>
         <CopyButton textToCopy={refactoredCode} />
       </div>
 
-      <div className="flex bg-[#1E1E1E] w-full h-96 rounded-lg">
+      <div className="flex bg-[#1E1E1E] border-[2px] border-[#ACD83A] w-full h-96 rounded-lg mb-4">
         <Editor
           value={refactoredCode}
           onChange={(value) => setRefactoredCode(value || "")}

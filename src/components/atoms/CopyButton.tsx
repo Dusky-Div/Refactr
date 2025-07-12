@@ -17,7 +17,7 @@ const CopyButton = ({ textToCopy }: { textToCopy: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="relative flex items-center gap-2 px-3 py-1.5 h-fit w-fit self-center text-sm font-medium text-white bg-[#2a2a2a] hover:bg-[#3a3a3a] rounded-lg border border-[#444] transition-all duration-200 ease-in-out group"
+      className="relative flex items-center gap-2 px-3 py-1.5 h-fit w-fit self-center text-sm font-medium text-white bg-[#2a2a2a] hover:bg-[#3a3a3a] rounded-lg border border-[#ACD83A] transition-all duration-200 ease-in-out group"
     >
       {copied ? (
         <Check className="w-4 h-4 text-green-400" />

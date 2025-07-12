@@ -8,9 +8,9 @@ const LogoutButton = () => {
     user && (
       <button
         onClick={logout}
-        className="absolute bottom-10 flex gap-2 p-4 w-fit self-center text-[#e05353] hover:text-[#fff] hover:bg-[#1d1d1d] rounded-xl font-medium text-sm"
+        className="font-fustat items-center flex gap-2 px-4 py-2 w-fit self-center border-2 bg-[#ed7575] border-[#000] text-[#000] rounded-lg font-extrabold text-sm hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] hover:transition-all shadow-[2px_2px_0px_0px_#fff] transition-transform duration-300 ease-out"
       >
-        <LogOut size="20" strokeWidth={2.2} />
+        <LogOut size="18" strokeWidth={2.6} />
         <p>Logout</p>
       </button>
     )

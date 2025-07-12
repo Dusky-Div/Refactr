@@ -6,12 +6,12 @@ import LogoutButton from "../atoms/LogoutButton";
 
 const SideNav = () => {
   return (
-    <div className="relative flex flex-col w-64 h-full bg-[#111111] border-r border-[#2c2c2c]">
+    <div className="relative flex flex-col w-64 h-full bg-[#000] border-r border-[#212121]">
       <div className="flex gap-1 text-white text-center justify-center py-8 font-semibold text-2xl">
         <button className="flex self-center">
-          <Zap color="violet" />
+          <Zap color="#ACD83A" fill="#ACD83A" />
         </button>
-        <button>Refactr</button>
+        <button className="font-fustat font-normal">Refactr</button>
       </div>
       <div className="flex gap-2 items-center justify-center">
         <SideNavAddButton />

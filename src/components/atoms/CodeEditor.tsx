@@ -1,5 +1,4 @@
 import Editor from "@monaco-editor/react";
-import { HyperText } from "../magicui/hyper-text";
 
 interface CodeEditorProps {
   inputCode: string;
@@ -39,19 +38,14 @@ const CodeEditor = ({
   };
 
   const handleEditorDidMount = (editor: any) => {
-    // Automatically format the code after pasting
-    editor.onDidPaste((e: any) => {
+    editor.onDidPaste(() => {
       editor.trigger("source", "editor.action.formatDocument", {});
     });
   };
 
   return (
-    <div className="flex flex-col self-center bg-[#111111] rounded-lg p-4 pt-0 mt-10 mb-3 w-4/5 border border-[#222222]">
-      <div className="flex justify-between items-center p-2 pr-0">
-        <div className="text-[#c9c9c9] font-medium text-lg">
-          <HyperText>Drop your code here!</HyperText>
-        </div>
-
+    <div className="flex flex-col self-center bg-[#000] rounded-lg p-4 pt-0 mb-3 w-4/5 border border-[#222222]">
+      <div className="flex justify-end items-center p-2 pr-0">
         <div className="w-28">
           <select
             value={language}
@@ -67,11 +61,11 @@ const CodeEditor = ({
         </div>
       </div>
 
-      <div className="h-96 overflow-auto rounded-lg">
+      <div className="h-96 overflow-auto border-[2px] border-[#ACD83A] rounded-lg">
         <Editor
           value={inputCode}
           onChange={(value) => setInputCode(value || "")}
-          language={language} // Dynamic language setting
+          language={language}
           theme="vs-dark"
           options={{
             minimap: { enabled: false },
@@ -82,7 +76,7 @@ const CodeEditor = ({
             automaticLayout: true,
             padding: { top: 16, bottom: 16 },
           }}
-          onMount={handleEditorDidMount} // Attach the mount handler
+          onMount={handleEditorDidMount}
         />
       </div>
     </div>
